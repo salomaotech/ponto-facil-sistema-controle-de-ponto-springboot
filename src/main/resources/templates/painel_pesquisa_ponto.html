@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Pontos</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="menu-lateral" id="menu-lateral"></div>
+
+        <div class="container" th:if="${session.usuarioLogado}">
+
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <h1>Consulta de Pontos</h1>
+
+            <form th:action="@{/tela/painel_pesquisa_ponto}" method="get">
+
+                <label for="dataInicio">Data inicial:</label>
+                <input type="date" id="dataInicio" name="dataInicio"
+                    th:value="${#temporals.format(dataInicio, 'yyyy-MM-dd')}" />
+
+                <label for="dataFim">Data final:</label>
+                <input type="date" id="dataFim" name="dataFim" th:value="${#temporals.format(dataFim, 'yyyy-MM-dd')}" />
+
+                <button type="submit" class="submit-button">Pesquisar</button>
+
+            </form>
+
+            <br>
+
+            <h2>Resultados</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Funcionário</th>
+                        <th>Data de Entrada</th>
+                        <th>Status</th>
+                        <th>Editar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="fp : ${funcionariosComPonto}">
+                        <!-- Exibe o nome do funcionário -->
+                        <td th:text="${fp[0].nome}"></td>
+                        <!-- Exibe a data de entrada formatada -->
+                        <td
+                            th:text="${#temporals.format(fp[1]?.horarioEntrada, 'dd/MM/yyyy') != null ? #temporals.format(fp[1].horarioEntrada, 'dd/MM/yyyy') : 'Não registrado'}">
+                        </td>
+                        <!-- Verifica o status do ponto -->
+                        <td>
+                            <!-- Se bateu o ponto em algum horário, mas não cumpriu, exibe o ícone de alerta -->
+                            <span
+                                th:if="${fp[1]?.horarioEntrada != null and (fp[1]?.horarioPausa == null or fp[1]?.horarioRetorno == null or fp[1]?.horarioSaida == null)}"
+                                class="alert-icon">⚠️</span>
+                            <!-- Se bateu o ponto corretamente (todos os horários registrados), exibe o ícone de check -->
+                            <span
+                                th:if="${fp[1]?.horarioEntrada != null and fp[1]?.horarioPausa != null and fp[1]?.horarioRetorno != null and fp[1]?.horarioSaida != null}"
+                                class="check-icon">✔️</span>
+                            <!-- Se não bateu o ponto em nenhum horário, exibe o ícone de uncheck -->
+                            <span th:if="${fp[1]?.horarioEntrada == null}" class="uncheck-icon">❌</span>
+                        </td>
+
+                        <td>
+                            <!-- Link de edição quando existe ponto registrado -->
+                            <a th:if="${fp[1] != null}" th:href="@{'/tela/cadastro_ponto/' + ${fp[1].id_registro}}"
+                                class="edit-icon" title="Editar ponto">✏️</a>
+
+                            <!-- Link para novo cadastro quando não existe ponto -->
+                            <a th:if="${fp[1] == null}" th:href="@{'/tela/cadastro_ponto'}" class="edit-icon"
+                                title="Cadastrar ponto">📌</a>
+                        </td>
+
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(funcionariosComPonto)}">
+                        <td colspan="4">Nenhum ponto encontrado.</td> <!-- Ajustado colspan -->
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:if="${session.usuarioLogado}" th:src="@{/js/menu_lateral.js}"></script>
+
+</body>
+
+</html>

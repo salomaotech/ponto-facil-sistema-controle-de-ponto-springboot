@@ -1,0 +1,68 @@
+.back-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 8px;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+h1 {
+    color: white;
+    margin-bottom: 30px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+label {
+    color: white;
+    text-align: left;
+    margin-bottom: -10px;
+    font-size: 14px;
+}
+
+input,
+select,
+textarea {
+    background-color: #0b7926;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    color: white;
+}
+
+input::placeholder,
+select::placeholder {
+    color: #dcdcdc;
+}
+
+.submit-button {
+    margin-top: 20px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+    background-color: #45a049;
+}
+
+textarea {
+    min-height: 150px;
+    background-color: #fff;
+    color: #000;
+}

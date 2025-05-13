@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+    <title>Login Controle de Ponto</title>
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="container-2">
+
+            <form th:action="@{/login}" th:object="${usuario}" method="post">
+
+                <h1>Login Controle de Ponto</h1>
+
+                <div class="input-box">
+                    <input th:field="*{email}" placeholder="Usuário" type="email">
+                </div>
+
+                <div class="input-box">
+                    <input th:field="*{password}" placeholder="Senha" type="password">
+                </div>
+
+                <br>
+
+                <div class="remember-forgot">
+                    <label>
+                        <input type="checkbox">
+                        Lembrar
+                    </label>
+                    <a th:href="@{/tela/recupera_senha_usuario}"> Esqueci a senha</a>
+                </div>
+
+                <button type="submit" class="login">Login</button>
+
+                <div class="input-box" th:if="${mensagemLogin != null}">
+                    <h2 th:text="${mensagemLogin}"></h2>
+                </div>
+
+                <div class="register-link">
+                    <p>Não tem uma conta? <a th:href="@{/tela/cadastro_usuario}">Cadastre-se</a></p>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

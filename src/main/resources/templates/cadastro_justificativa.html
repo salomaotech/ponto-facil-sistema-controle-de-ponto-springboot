@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro De Justificativa</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="menu-lateral" id="menu-lateral"></div>
+
+        <div class="container" th:if="${session.usuarioLogado}">
+
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <h1>Cadastro De Justificativa</h1>
+
+            <form th:action="@{/justificativa}" method="post" th:object="${justificativa}">
+
+                <input type="hidden" th:field="*{id_justificativa}" />
+
+                <label for="funcionarios">* Funcionário:</label>
+                <select name="funcionarios" id="funcionarios" required>
+                    <option value="">Selecione</option>
+                    <th:block th:each="f : ${listaFuncionarios}">
+                        <option th:value="${f.id_funcionario}" th:text="${f.nome}"
+                            th:selected="${justificativa.funcionarios != null and f.id_funcionario == justificativa.funcionarios.id_funcionario}">
+                        </option>
+                    </th:block>
+                </select>
+
+                <label for="dataFalta">* Data da Falta:</label>
+                <input type="date" id="dataFalta" name="dataFalta"
+                    th:value="${#temporals.format(justificativa.dataFalta, 'yyyy-MM-dd')}" required />
+
+                <label for="descricao">Descrição:</label>
+                <textarea th:field="*{descricao}" id="descricao"></textarea>
+
+                <button type="submit" class="submit-button">Salvar Justificativa</button>
+
+            </form>
+
+        </div>
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:if="${session.usuarioLogado}" th:src="@{/js/menu_lateral.js}"></script>
+
+</body>
+
+</html>

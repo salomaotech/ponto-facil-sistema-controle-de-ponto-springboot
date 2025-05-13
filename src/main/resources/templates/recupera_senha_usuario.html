@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+    <title>Recuperar Senha</title>
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="container-2">
+
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <h1>Recuperar Senha</h1>
+
+            <form th:action="@{/login/recupera}" th:object="${usuario}" method="post">
+
+                <div class="input-box">
+                    <input th:field="*{email}" placeholder="E-mail" type="email" required>
+                </div>
+
+                <div class="input-box">
+                    <input th:field="*{keypass}" placeholder="Palavra chave" type="text" required>
+                </div>
+
+                <div class="input-box" th:if="${mensagemErro != null}">
+                    <h2 th:text="${mensagemErro}"></h2>
+                </div>
+
+                <button type="submit" class="login">Recuperar</button>
+
+                <div class="register-link">
+                    <p>Lembrou sua senha? <a th:href="@{/tela/login}">Entrar</a></p>
+                </div>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

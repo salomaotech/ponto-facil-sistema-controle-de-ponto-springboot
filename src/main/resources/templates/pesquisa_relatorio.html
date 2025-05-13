@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerar relatório de Pontos</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="menu-lateral" id="menu-lateral"></div>
+
+        <div class="container" th:if="${session.usuarioLogado}">
+
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <h1>Gerar relatório de Pontos</h1>
+
+            <form th:action="@{/tela/pesquisa_relatorio}" method="get">
+
+                <label for="funcionarios">* Funcionário:</label>
+                <select name="idFuncionario" id="funcionarios" required>
+                    <option value="">Selecione</option>
+                    <th:block th:each="f : ${listaFuncionarios}">
+                        <option th:value="${f.id_funcionario}" th:text="${f.nome}"
+                            th:selected="${idFuncionario != null and idFuncionario == f.id_funcionario}">
+                        </option>
+                    </th:block>
+                </select>
+
+                <label for="dataInicio">Data inicial:</label>
+                <input type="date" id="dataInicio" name="dataInicio"
+                    th:value="${#temporals.format(dataInicio, 'yyyy-MM-dd')}" />
+
+                <label for="dataFim">Data final:</label>
+                <input type="date" id="dataFim" name="dataFim" th:value="${#temporals.format(dataFim, 'yyyy-MM-dd')}" />
+
+                <button type="submit" class="submit-button">Pesquisar</button>
+
+            </form>
+
+            <br>
+
+            <h2>Resultados</h2>
+
+            <table class="table-ponto">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Entrada</th>
+                        <th>Pausa</th>
+                        <th>Retorno</th>
+                        <th>Saída</th>
+                        <th>Hr. Extra</th>
+                        <th>Editar</th> <!-- Nova coluna -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="p : ${pontos}">
+                        <td th:text="${#temporals.format(p.data, 'dd/MM/yyyy')}"></td>
+                        <td th:text="${p.horarioEntrada}"></td>
+                        <td th:text="${p.horarioPausa}"></td>
+                        <td th:text="${p.horarioRetorno}"></td>
+                        <td th:text="${p.horarioSaida}"></td>
+                        <td th:text="${p.horasExtras}"></td>
+                        <td>
+                            <a th:href="@{'/tela/cadastro_ponto/' + ${p.id_registro}}">✏️</a> <!-- Link para edição -->
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(pontos)}">
+                        <td colspan="6">Nenhum ponto encontrado.</td> <!-- Ajustado colspan -->
+                    </tr>
+                </tbody>
+            </table>
+
+            <br>
+
+            <h2>Resumo</h2>
+            <table class="table-ponto">
+                <thead>
+                    <tr>
+                        <th>Total de Horas Trabalhadas</th>
+                        <th>Total de Horas Extras</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td th:text="${totalHoras}"></td>
+                        <td th:text="${totalHorasExtras}"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br>
+
+            <h2>Download do Relatório</h2>
+            <br>
+
+            <div th:if="${pdfDownloadLink != null}">
+                <a th:href="@{${pdfDownloadLink}}" target="_blank">
+                    ⬇️ Clique aqui para baixar o relatório em PDF
+                </a>
+            </div>
+
+            <div th:if="${pdfDownloadLink == null}">
+                <p>Relatório não gerado ainda.</p>
+            </div>
+
+        </div>
+
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:if="${session.usuarioLogado}" th:src="@{/js/menu_lateral.js}"></script>
+
+</body>
+
+</html>

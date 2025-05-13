@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administração de Ponto</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="menu-lateral" id="menu-lateral"></div>
+
+        <div class="container" th:if="${session.usuarioLogado}">
+
+            <h1>Home</h1>
+
+        </div>
+
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:if="${session.usuarioLogado}" th:src="@{/js/menu_lateral.js}"></script>
+
+</body>
+
+</html>

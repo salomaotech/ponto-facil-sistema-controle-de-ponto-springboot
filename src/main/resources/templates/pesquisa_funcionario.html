@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home-style.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/cadastro-style.css}">
+    <title>Pesquisar Funcionário</title>
+
+    <!-- Adicione jQuery -->
+    <script th:src="@{/js/jquery-3.6.0.min.js}"></script>
+
+</head>
+
+<body>
+
+    <header></header>
+
+    <main>
+
+        <div class="menu-lateral" id="menu-lateral"></div>
+
+        <div class="container" th:if="${session.usuarioLogado}">
+
+            <button class="back-button" onclick="window.history.back()">←</button>
+            <h1>Pesquisar Funcionário</h1>
+
+            <form th:action="@{/tela/pesquisa_funcionario}" method="get">
+
+                <label for="cpf">* CPF:</label>
+                <input type="text" name="cpf" placeholder="Digite o CPF" required>
+
+                <button type="submit" class="submit-button">Pesquisar</button>
+
+            </form>
+
+            <br>
+
+            <div class="tabela-resultados" th:if="${resultados != null}">
+                <h2>Resultados</h2>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nome</th>
+                            <th>CPF</th>
+                            <th>Editar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="funcionario : ${resultados}">
+                            <td th:text="${funcionario.nome}"></td>
+                            <td th:text="${funcionario.cpf}"></td>
+                            <td>
+                                <a th:href="@{/tela/cadastro_funcionario/{id}(id=${funcionario.id_funcionario})}"
+                                    title="Editar">
+                                    ✏️
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script th:src="@{/js/header.js}"></script>
+    <script th:if="${session.usuarioLogado}" th:src="@{/js/menu_lateral.js}"></script>
+
+</body>
+
+</html>
