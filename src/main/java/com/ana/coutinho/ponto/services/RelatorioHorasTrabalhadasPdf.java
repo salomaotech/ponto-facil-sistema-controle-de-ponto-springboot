@@ -42,8 +42,8 @@ public class RelatorioHorasTrabalhadasPdf {
 
         // Adicionando informações gerais
         Font fontCorpo = FontFactory.getFont(FontFactory.HELVETICA, 12);
-        Paragraph info = new Paragraph("Total de Horas Trabalhadas: " + totalHoras.toString()
-                + "\nTotal de Horas Extras: " + totalHorasExtras.toString(), fontCorpo);
+        Paragraph info = new Paragraph("Total de Horas Trabalhadas: " + String.valueOf(totalHoras)
+                + "\nTotal de Horas Extras: " + String.valueOf(totalHorasExtras), fontCorpo);
         gerarPdf.addConteudo(info);
         gerarPdf.addConteudo(new Paragraph("\n"));
 
@@ -57,8 +57,8 @@ public class RelatorioHorasTrabalhadasPdf {
             dadosTabela[i] = new String[] {
 
                     Datas.localDateParaStringBr(ponto.getData()),
-                    ponto.getHorarioEntrada().toString(),
-                    ponto.getHorarioSaida().toString(),
+                    String.valueOf(ponto.getHorarioEntrada()),
+                    String.valueOf(ponto.getHorarioSaida()),
                     String.valueOf(ponto.getHorasTrabalhadas()),
                     String.valueOf(ponto.getHorasExtras())
 

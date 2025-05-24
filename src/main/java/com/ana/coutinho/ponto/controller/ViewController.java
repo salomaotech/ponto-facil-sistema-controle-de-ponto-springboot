@@ -1,6 +1,7 @@
 package com.ana.coutinho.ponto.controller;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -481,7 +482,17 @@ public class ViewController {
 
         ModelAndView mv = new ModelAndView("pesquisa_relatorio");
         List<Ponto> pontos = new ArrayList<>();
-        Turnos turno = turnosRepository.findAll().get(0);
+        Turnos turno;
+
+        try {
+
+            turno = turnosRepository.findAll().get(0);
+
+        } catch (Exception ex) {
+
+            turno = new Turnos();
+
+        }
 
         BigDecimal totalHoras = new BigDecimal(0);
         BigDecimal totalHorasExtras = new BigDecimal(0);
@@ -531,13 +542,21 @@ public class ViewController {
         // Lista os pontos batidos pelo funcionario
         for (Ponto p : pontos) {
 
-            // Calcula as horas reais trabalhadas pelo funcionario
-            double horasTrabalhadas = CalculaHoras.calcularHorasTrabalhadasFuncionario(p.getHorarioEntrada(),
+            // Calcula as horas reais trabalhadas pelo funcionário
+            double horasTrabalhadas = CalculaHoras.calcularHorasTrabalhadasFuncionario(
+                    p.getHorarioEntrada(),
                     p.getHorarioPausa(),
-                    p.getHorarioRetorno(), p.getHorarioSaida());
+                    p.getHorarioRetorno(),
+                    p.getHorarioSaida());
+
+            // Arredonda horas trabalhadas
+            horasTrabalhadas = new BigDecimal(horasTrabalhadas).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
             // Calcula o saldo (horas extras)
             double saldoHoras = horasTrabalhadas - horasDeveTrabalhar;
+
+            // Arredonda saldo
+            saldoHoras = new BigDecimal(saldoHoras).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
             // Popula as horas
             p.setHorasTrabalhadas(horasTrabalhadas);
@@ -546,6 +565,10 @@ public class ViewController {
             // Atualiza o saldo
             totalHoras = totalHoras.add(new BigDecimal(horasTrabalhadas));
             totalHorasExtras = totalHorasExtras.add(new BigDecimal(saldoHoras));
+
+            // Arredonda horas
+            totalHoras = totalHoras.setScale(2, RoundingMode.HALF_UP);
+            totalHorasExtras = totalHorasExtras.setScale(2, RoundingMode.HALF_UP);
 
         }
 

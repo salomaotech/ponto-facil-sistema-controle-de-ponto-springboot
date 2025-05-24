@@ -114,3 +114,63 @@ Se você deseja contribuir com o projeto, por favor, siga as etapas abaixo:
 
 ## Licença
 
+
+# Rodando o projeto com o Docker
+
+## Descrição
+Este projeto é uma aplicação Spring Boot que inclui um banco de dados MySQL embutido em um container Docker.
+
+## Atenção
+
+- Dentro da pasta de ```Projeto/docker-projeto-ponto``` estão as configurações do Docker
+- Depois que gerar a build com o nome ```ponto-0.0.1-SNAPSHOT.jar``` coloque o arquivo dentro da pasta ```Projeto/docker-projeto-ponto``` e gere a imagem do Docker a partir dela.
+
+## Como usar
+
+### 1. Pré-requisitos
+- Docker instalado no seu computador.
+
+### 2. Rodando o container
+Para subir a aplicação e o banco juntos, rode o seguinte comando:
+
+```
+docker run -d -p 8080:8080 --name projeto-ponto-container projeto-ponto
+```
+
+Isso executa o container em background e mapeia a porta 8080 do container para a porta 8080 do host.
+
+### 3. Acessando a aplicação
+Abra o navegador e acesse:
+
+```
+http://localhost:8080/
+```
+
+### 4. Parar o container
+Para parar o container que está rodando:
+
+```
+docker stop projeto-ponto-container
+```
+
+### 5. Remover o container
+Para remover o container parado:
+
+```
+docker rm projeto-ponto-container
+```
+
+### 6. Remover a imagem
+Para remover a imagem (certifique-se que o container esteja parado e removido):
+
+```
+docker rmi projeto-ponto
+```
+
+## Informações importantes
+- O banco de dados MySQL está rodando dentro do container.
+- A aplicação Spring Boot está configurada para se conectar a esse banco localmente dentro do container.
+- A porta 3306 do banco **não precisa** ser exposta externamente.
+- A aplicação está acessível pela porta 8080 no host.
+
+---

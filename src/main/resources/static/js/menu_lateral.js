@@ -10,6 +10,10 @@ function criarMenu() {
                 <a href="#">⚙️ Gerenciamento</a>
                 
                 <ul>
+                    <li><a href="/tela/painel_pesquisa_ponto">🖥️ Painel de Pontos</a></li>
+                </ul>
+                
+                <ul>
                     <li><a href="/tela/cadastro_funcionario">👥 Cadastro de Funcionários</a></li>
                 </ul>
 
