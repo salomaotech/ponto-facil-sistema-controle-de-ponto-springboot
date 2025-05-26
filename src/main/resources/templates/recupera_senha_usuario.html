@@ -25,7 +25,7 @@
             <button class="back-button" onclick="window.history.back()">←</button>
             <h1>Recuperar Senha</h1>
 
-            <form th:action="@{/login/recupera}" th:object="${usuario}" method="post">
+            <form th:action="@{/usuario/recupera}" th:object="${usuario}" method="post">
 
                 <div class="input-box">
                     <input th:field="*{email}" placeholder="E-mail" type="email" required>
@@ -35,14 +35,14 @@
                     <input th:field="*{keypass}" placeholder="Palavra chave" type="text" required>
                 </div>
 
-                <div class="input-box" th:if="${mensagemErro != null}">
-                    <h2 th:text="${mensagemErro}"></h2>
+                <div class="input-box" th:if="${session.mensagemErro != null}">
+                    <h2 th:text="${session.mensagemErro}"></h2>
                 </div>
 
                 <button type="submit" class="login">Recuperar</button>
 
                 <div class="register-link">
-                    <p>Lembrou sua senha? <a th:href="@{/login}">Entrar</a></p>
+                    <p>Lembrou sua senha? <a th:href="@{/usuario/pagina_login}">Entrar</a></p>
                 </div>
 
             </form>

@@ -46,8 +46,8 @@
                         required>
                 </div>
 
-                <div class="input-box" th:if="${mensagemUsuarioExiste != null}">
-                    <h2 th:text="${mensagemUsuarioExiste}"></h2>
+                <div class="input-box" th:if="${session.mensagemErro != null}">
+                    <h2 th:text="${session.mensagemErro}"></h2>
                 </div>
 
                 <button type="submit" class="login">Cadastrar</button>

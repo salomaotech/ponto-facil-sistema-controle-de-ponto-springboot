@@ -23,7 +23,7 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository repository;
 
-    @PostMapping
+    @PostMapping("/login")
     public String logar(@ModelAttribute Usuario usuario, HttpSession session) {
 
         CifraSenha cifraSenha = new CifraSenha();
@@ -33,14 +33,14 @@ public class UsuarioController {
         if (!usuarOptional.isEmpty()) {
 
             session.setAttribute("usuarioLogado", usuarOptional.get());
-            session.setAttribute("mensagemLogin", null);
+            session.setAttribute("mensagemErro", null);
             return "redirect:/home";
 
         } else {
 
             session.setAttribute("usuarioLogado", null);
-            session.setAttribute("mensagemLogin", "Login incorreto!!!");
-            return "redirect:/login/pagina_login";
+            session.setAttribute("mensagemErro", "Login incorreto!!!");
+            return "redirect:/usuario/pagina_login";
 
         }
 
@@ -53,15 +53,17 @@ public class UsuarioController {
 
         if (!usuarOptional.isEmpty()) {
 
+            // Se der certo redireciona para a Home
             session.setAttribute("usuarioLogado", usuarOptional.get());
-            session.setAttribute("mensagemLogin", null);
-            return "redirect:/home";
+            session.setAttribute("mensagemErro", null);
+            return "redirect:/";
 
         } else {
 
+            // Se der errado redireciona para a página de recuperação
             session.setAttribute("usuarioLogado", null);
-            session.setAttribute("mensagemLogin", "Login incorreto!!!");
-            return "redirect:/login";
+            session.setAttribute("mensagemErro", "Palavra chave incorreta!!!");
+            return "redirect:/usuario/recupera_senha_usuario";
 
         }
 
@@ -72,7 +74,7 @@ public class UsuarioController {
 
         ModelAndView mv = new ModelAndView("pagina_login");
         mv.addObject("usuario", new Usuario());
-        mv.addObject("mensagemLogin", session.getAttribute("mensagemLogin"));
+        session.setAttribute("mensagemErro", session.getAttribute("mensagemErro"));
         return mv;
 
     }
@@ -94,7 +96,7 @@ public class UsuarioController {
         // Verificação inicial de campos obrigatórios
         if (!possuiCamposObrigatoriosPreenchidos(usuario)) {
 
-            session.setAttribute("mensagemUsuarioExiste", "Todos os campos devem ser preenchidos!");
+            session.setAttribute("mensagemErro", "Todos os campos devem ser preenchidos!");
             return new ModelAndView("redirect:/cadastro_usuario");
 
         }
@@ -102,7 +104,7 @@ public class UsuarioController {
         // Validação: senhas não conferem
         if (!usuario.getPassword().equals(usuario.getPasswordConfirm())) {
 
-            session.setAttribute("mensagemUsuarioExiste", "As senhas não combinam!");
+            session.setAttribute("mensagemErro", "As senhas não combinam!");
             return new ModelAndView("redirect:/cadastro_usuario");
 
         }
@@ -127,7 +129,7 @@ public class UsuarioController {
             }
 
             // Outro usuário já usa este e-mail
-            session.setAttribute("mensagemUsuarioExiste", "Já existe um usuário com este e-mail!");
+            session.setAttribute("mensagemErro", "Já existe um usuário com este e-mail!");
             return new ModelAndView("redirect:/cadastro_usuario");
 
         }
@@ -165,7 +167,7 @@ public class UsuarioController {
 
             // Usuário NÃO logado
             mv = new ModelAndView("login");
-            mv.addObject("mensagemLogin", session.getAttribute("mensagemLogin"));
+            session.setAttribute("mensagemErro", session.getAttribute("mensagemErro"));
             mv.addObject("usuario", new Usuario());
 
         } else {
@@ -192,7 +194,7 @@ public class UsuarioController {
     public ModelAndView cadastroUsuario(HttpSession session) {
 
         ModelAndView mv = new ModelAndView("cadastro_usuario");
-        mv.addObject("mensagemUsuarioExiste", session.getAttribute("mensagemUsuarioExiste"));
+        session.setAttribute("mensagemErro", session.getAttribute("mensagemErro"));
 
         if (session.getAttribute("usuarioLogado") == null) {
 

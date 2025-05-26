@@ -9,12 +9,12 @@ import jakarta.servlet.http.HttpSession;
 @Controller
 public class AppController {
 
-    @GetMapping("/home")
+    @GetMapping()
     public ModelAndView home(HttpSession session) {
 
         if (session.getAttribute("usuarioLogado") == null) {
 
-            return new ModelAndView("redirect:/login/pagina_login");
+            return new ModelAndView("redirect:/usuario/pagina_login");
 
         } else {
 

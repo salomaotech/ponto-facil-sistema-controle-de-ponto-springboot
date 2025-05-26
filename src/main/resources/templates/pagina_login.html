@@ -23,7 +23,7 @@
 
         <div class="container-2">
 
-            <form th:action="@{/login}" th:object="${usuario}" method="post">
+            <form th:action="@{/usuario/login}" th:object="${usuario}" method="post">
 
                 <h1>Login Controle de Ponto</h1>
 
@@ -42,13 +42,13 @@
                         <input type="checkbox">
                         Lembrar
                     </label>
-                    <a th:href="@{/login/recupera_senha_usuario}"> Esqueci a senha</a>
+                    <a th:href="@{/usuario/recupera_senha_usuario}"> Esqueci a senha</a>
                 </div>
 
                 <button type="submit" class="login">Login</button>
 
-                <div class="input-box" th:if="${mensagemLogin != null}">
-                    <h2 th:text="${mensagemLogin}"></h2>
+                <div class="input-box" th:if="${session.mensagemErro != null}">
+                    <h2 th:text="${session.mensagemErro}"></h2>
                 </div>
 
                 <div class="register-link">
