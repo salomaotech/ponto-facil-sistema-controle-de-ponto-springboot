@@ -1,7 +1,10 @@
 package com.ana.coutinho.ponto.controller;
 
-import com.ana.coutinho.ponto.model.Ponto;
-import com.ana.coutinho.ponto.repository.PontoRepository;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,51 +15,85 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import com.ana.coutinho.ponto.model.Funcionarios;
+import com.ana.coutinho.ponto.model.Ponto;
+import com.ana.coutinho.ponto.repository.FuncionariosRepository;
+import com.ana.coutinho.ponto.repository.PontoRepository;
 
 @Controller
 @RequestMapping("/ponto")
 public class PontoController {
 
     @Autowired
-    private PontoRepository repository;
+    private PontoRepository pontoRepository;
+
+    @Autowired
+    private FuncionariosRepository funcionariosRepository;
 
     @PostMapping
     public String save(@ModelAttribute Ponto ponto) {
 
-        List<Ponto> pontosNaData = repository.verificarPontoHoje(
-
-                ponto.getFuncionarios().getId_funcionario(),
-                ponto.getData()
-
-        );
+        List<Ponto> pontosNaData = pontoRepository.verificarPontoHoje(ponto.getFuncionarios().getId_funcionario(),
+                ponto.getData());
 
         for (Ponto existente : pontosNaData) {
 
-            // Se o novo ponto for diferente do atual, não permite criar outro, redirecione
-            // para o existente
+            /*
+             * Se o novo ponto for diferente do atual, não permite criar outro, redirecione
+             * para o existente
+             */
             if (!existente.getId_registro().equals(ponto.getId_registro())) {
 
-                return "redirect:/cadastro_ponto/" + existente.getId_registro();
+                return "redirect:/ponto/cadastro_ponto/" + existente.getId_registro();
 
             }
 
         }
 
-        repository.save(ponto);
-        return "redirect:/cadastro_ponto/" + ponto.getId_registro();
+        pontoRepository.save(ponto);
+        return "redirect:/ponto/cadastro_ponto/" + ponto.getId_registro();
 
     }
 
     @GetMapping("/cadastro_ponto")
-    public ModelAndView cadastroPonto() {
+    public ModelAndView cadastroPonto(
+            @RequestParam(value = "idFuncionario", required = false) Long idFuncionario,
+            @RequestParam(value = "dataInicio", required = false) String dataInicioStr) {
 
         ModelAndView mv = new ModelAndView("cadastro_ponto");
-        mv.addObject("ponto", new Ponto());
-        mv.addObject("listaFuncionarios", repository.findAll());
+        Ponto ponto = new Ponto();
+
+        // Parse das datas
+        LocalDate dataInicio = null;
+
+        try {
+
+            // Se dataInicio não for informada, pega a data de hoje
+            if (dataInicioStr != null && !dataInicioStr.isEmpty()) {
+
+                dataInicio = LocalDate.parse(dataInicioStr);
+
+            } else {
+
+                // Atribui a data de hoje
+                dataInicio = LocalDate.now();
+
+            }
+
+        } catch (Exception ignored) {
+
+        }
+
+        if (idFuncionario != null) {
+
+            Funcionarios funcionario = funcionariosRepository.findById(idFuncionario).orElse(null);
+            ponto.setFuncionarios(funcionario);
+
+        }
+
+        mv.addObject("ponto", ponto);
+        mv.addObject("listaFuncionarios", funcionariosRepository.findAll());
+        mv.addObject("dataInicio", dataInicio);
         return mv;
 
     }
@@ -64,7 +101,7 @@ public class PontoController {
     @GetMapping("/cadastro_ponto/{id}")
     public ModelAndView abreCadastroPonto(@PathVariable("id") long id) {
 
-        Optional<Ponto> cadastro = repository.findById(id);
+        Optional<Ponto> cadastro = pontoRepository.findById(id);
         ModelAndView mv = new ModelAndView("cadastro_ponto");
 
         if (cadastro.isPresent()) {
@@ -77,7 +114,7 @@ public class PontoController {
 
         }
 
-        mv.addObject("listaFuncionarios", repository.findAll());
+        mv.addObject("listaFuncionarios", funcionariosRepository.findAll());
         return mv;
 
     }
@@ -91,7 +128,7 @@ public class PontoController {
         ModelAndView mv = new ModelAndView("pesquisa_ponto");
         List<Ponto> pontos = new ArrayList<>();
 
-        mv.addObject("listaFuncionarios", repository.findAll());
+        mv.addObject("listaFuncionarios", funcionariosRepository.findAll());
 
         LocalDate dataInicio = null;
         LocalDate dataFim = null;
@@ -115,7 +152,7 @@ public class PontoController {
         // Isto evita consultar todos os registros
         if (idFuncionario != null) {
 
-            pontos = repository.buscarPorFiltros(idFuncionario, dataInicio, dataFim);
+            pontos = pontoRepository.buscarPorFiltros(idFuncionario, dataInicio, dataFim);
 
         }
 
@@ -131,15 +168,13 @@ public class PontoController {
     @GetMapping("/painel_pesquisa_ponto")
     public ModelAndView pesquisarPainelPonto(
             @RequestParam(value = "idFuncionario", required = false) Long idFuncionario,
-            @RequestParam(value = "dataInicio", required = false) String dataInicioStr,
-            @RequestParam(value = "dataFim", required = false) String dataFimStr) {
+            @RequestParam(value = "dataInicio", required = false) String dataInicioStr) {
 
         ModelAndView mv = new ModelAndView("painel_pesquisa_ponto");
         List<Object[]> resultados = new ArrayList<>();
 
         // Parse das datas
         LocalDate dataInicio = null;
-        LocalDate dataFim = null;
 
         try {
 
@@ -155,30 +190,15 @@ public class PontoController {
 
             }
 
-            if (dataFimStr != null && !dataFimStr.isEmpty()) {
-
-                dataFim = LocalDate.parse(dataFimStr);
-
-            }
-
-            // Se data final for nula, use a mesma da data inicial
-            if (dataInicio != null && dataFim == null) {
-
-                dataFim = dataInicio;
-
-            }
-
         } catch (Exception ignored) {
 
         }
 
-        // Buscar funcionários e pontos, usando LEFT JOIN
-        resultados = repository.buscarFuncionariosComPontos(dataInicio, dataFim);
+        resultados = pontoRepository.buscarFuncionariosComPontos(dataInicio, dataInicio);
 
         mv.addObject("funcionariosComPonto", resultados);
         mv.addObject("idFuncionario", idFuncionario);
         mv.addObject("dataInicio", dataInicio);
-        mv.addObject("dataFim", dataFim);
 
         return mv;
 

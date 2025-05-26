@@ -11,7 +11,7 @@
 body {
     width: 100%;
     min-height: 100vh;
-    background: url("../img/design-destaque-14-1.jpg");
+    background: url("../img/fundo.jpg");
     background-size: cover;
     background-position: center;
 }
@@ -114,6 +114,17 @@ main {
 
 .remember-forgot a:hover {
     text-decoration: underline;
+}
+
+.mensagem-erro {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px 15px;
+    border-radius: 5px;
+    border: 1px solid #f5c6cb;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .login {

@@ -35,14 +35,13 @@
                 <select th:field="*{funcionarios}" id="funcionarios" required>
                     <option value="">Selecione</option>
                     <th:block th:each="f : ${listaFuncionarios}">
-                        <option th:value="${f.id_funcionario}" th:text="${f.nome}"
-                            th:selected="${ponto.funcionarios != null and f.id_funcionario == ponto.funcionarios.id_funcionario}">
-                        </option>
+                        <option th:value="${f.id_funcionario}" th:text="${f.nome}"></option>
                     </th:block>
                 </select>
 
                 <label for="data">* Data:</label>
-                <input type="date" id="data" name="data" th:value="${#temporals.format(ponto.data, 'yyyy-MM-dd')}"
+                <input type="date" id="data" name="data"
+                    th:value="${ponto.data != null ? #temporals.format(ponto.data, 'yyyy-MM-dd') : #temporals.format(dataInicio, 'yyyy-MM-dd')}"
                     required />
 
                 <table class="table-ponto">

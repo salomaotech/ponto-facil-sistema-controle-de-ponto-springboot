@@ -26,7 +26,7 @@
             <button class="back-button" onclick="window.history.back()">←</button>
             <h1>Lista de Justificativas</h1>
 
-            <form th:action="@{/pesquisa_justificativa}" method="get">
+            <form th:action="@{/justificativa/pesquisa_justificativa}" method="get">
 
                 <label for="funcionarios">* Funcionário:</label>
                 <select name="idFuncionario" id="funcionarios" required>
@@ -62,7 +62,7 @@
                         <td th:text="${#temporals.format(justificativa.dataFalta, 'dd/MM/yyyy')}"></td>
                         <td th:text="${justificativa.descricao}"></td>
                         <td>
-                            <a th:href="@{/cadastro_justificativa/{id}(id=${justificativa.id_justificativa})}"
+                            <a th:href="@{/justificativa/cadastro_justificativa/{id}(id=${justificativa.id_justificativa})}"
                                 title="Editar">
                                 ✏️
                             </a>

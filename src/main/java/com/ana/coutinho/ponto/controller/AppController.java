@@ -18,7 +18,7 @@ public class AppController {
 
         } else {
 
-            return new ModelAndView("redirect:/painel_pesquisa_ponto");
+            return new ModelAndView("redirect:/ponto/painel_pesquisa_ponto");
 
         }
 

@@ -5,7 +5,7 @@ function criarHeader() {
 
     nav.innerHTML = `
         <div class="logo">
-            <a href="/home"><img src="/img/logotipo.png" class="logo-topo"></a>
+            <a href="/"><img src="/img/logotipo.png" class="logo-topo"></a>
         </div>
     `;
 

@@ -25,7 +25,7 @@
             <button class="back-button" onclick="window.history.back()">←</button>
             <h1 id="idTituloTopo">Cadastro de Usuário</h1>
 
-            <form th:action="@{/usuario}" th:object="${usuario}" method="post">
+            <form th:action="@{/usuario/cadastro}" th:object="${usuario}" method="post">
 
                 <input type="hidden" th:field="*{id}" id="userId" />
 
@@ -46,14 +46,14 @@
                         required>
                 </div>
 
-                <div class="input-box" th:if="${session.mensagemErro != null}">
+                <div class="mensagem-erro" th:if="${session.mensagemErro != null}">
                     <h2 th:text="${session.mensagemErro}"></h2>
                 </div>
 
                 <button type="submit" class="login">Cadastrar</button>
 
                 <div class="register-link">
-                    <p>Já tem uma conta? <a th:href="@{/login}">Entrar</a></p>
+                    <p>Já tem uma conta? <a th:href="@{/usuario/pagina_login}">Entrar</a></p>
                 </div>
 
             </form>

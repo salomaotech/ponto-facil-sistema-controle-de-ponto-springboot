@@ -13,6 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ana.coutinho.ponto.model.Usuario;
 import com.ana.coutinho.ponto.repository.UsuarioRepository;
 import com.ana.coutinho.ponto.services.CifraSenha;
+import com.ana.coutinho.ponto.services.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -34,7 +35,7 @@ public class UsuarioController {
 
             session.setAttribute("usuarioLogado", usuarOptional.get());
             session.setAttribute("mensagemErro", null);
-            return "redirect:/home";
+            return "redirect:/";
 
         } else {
 
@@ -69,35 +70,17 @@ public class UsuarioController {
 
     }
 
-    @GetMapping("/pagina_login")
-    public ModelAndView paginaLogin(HttpSession session) {
-
-        ModelAndView mv = new ModelAndView("pagina_login");
-        mv.addObject("usuario", new Usuario());
-        session.setAttribute("mensagemErro", session.getAttribute("mensagemErro"));
-        return mv;
-
-    }
-
-    @GetMapping("/logout")
-    public String deslogar(HttpSession session) {
-
-        session.invalidate();
-        return "redirect:/login";
-
-    }
-
-    @PostMapping
+    @PostMapping("/cadastro")
     public ModelAndView cadastrar(@ModelAttribute Usuario usuario, HttpSession session) {
 
         Optional<Usuario> usuarOptional = repository.findByEmail(usuario.getEmail());
         CifraSenha cifraSenha = new CifraSenha();
 
         // Verificação inicial de campos obrigatórios
-        if (!possuiCamposObrigatoriosPreenchidos(usuario)) {
+        if (!UsuarioService.possuiCamposObrigatoriosPreenchidos(usuario)) {
 
             session.setAttribute("mensagemErro", "Todos os campos devem ser preenchidos!");
-            return new ModelAndView("redirect:/cadastro_usuario");
+            return new ModelAndView("redirect:/usuario/cadastro_usuario");
 
         }
 
@@ -105,7 +88,7 @@ public class UsuarioController {
         if (!usuario.getPassword().equals(usuario.getPasswordConfirm())) {
 
             session.setAttribute("mensagemErro", "As senhas não combinam!");
-            return new ModelAndView("redirect:/cadastro_usuario");
+            return new ModelAndView("redirect:/usuario/cadastro_usuario");
 
         }
 
@@ -121,40 +104,41 @@ public class UsuarioController {
                 usuario.setEmail(usuarioExistente.getEmail());
 
                 // Cifra a senha e atualiza o cadastro
-                cifrarSenha(usuario, cifraSenha);
+                UsuarioService.cifrarSenha(usuario, cifraSenha);
                 repository.save(usuario);
 
-                return new ModelAndView("redirect:/logout");
+                return new ModelAndView("redirect:/usuario/logout");
 
             }
 
             // Outro usuário já usa este e-mail
             session.setAttribute("mensagemErro", "Já existe um usuário com este e-mail!");
-            return new ModelAndView("redirect:/cadastro_usuario");
+            return new ModelAndView("redirect:/usuario/cadastro_usuario");
 
         }
 
         // Novo usuário
-        cifrarSenha(usuario, cifraSenha);
+        UsuarioService.cifrarSenha(usuario, cifraSenha);
         repository.save(usuario);
-        return new ModelAndView("redirect:/login");
+        return new ModelAndView("redirect:/usuario/logout");
 
     }
 
-    private void cifrarSenha(Usuario usuario, CifraSenha cifraSenha) {
+    @GetMapping("/pagina_login")
+    public ModelAndView paginaLogin(HttpSession session) {
 
-        String senhaCifrada = cifraSenha.cifrarSenha(usuario.getPassword());
-        usuario.setPassword(senhaCifrada);
-        usuario.setPasswordConfirm(senhaCifrada);
+        ModelAndView mv = new ModelAndView("pagina_login");
+        mv.addObject("usuario", new Usuario());
+        session.setAttribute("mensagemErro", session.getAttribute("mensagemErro"));
+        return mv;
 
     }
 
-    public static boolean possuiCamposObrigatoriosPreenchidos(Usuario usuario) {
+    @GetMapping("/logout")
+    public String deslogar(HttpSession session) {
 
-        return usuario.getEmail() != null && !usuario.getEmail().trim().isEmpty()
-                && usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()
-                && usuario.getPasswordConfirm() != null && !usuario.getPasswordConfirm().trim().isEmpty()
-                && usuario.getKeypass() != null && !usuario.getKeypass().trim().isEmpty();
+        session.invalidate();
+        return "redirect:/usuario/pagina_login";
 
     }
 

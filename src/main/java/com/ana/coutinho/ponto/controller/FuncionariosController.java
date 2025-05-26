@@ -27,7 +27,7 @@ public class FuncionariosController {
     public String save(@ModelAttribute Funcionarios funcionarios) {
 
         repository.save(funcionarios);
-        return "redirect:/cadastro_funcionario/" + funcionarios.getId_funcionario();
+        return "redirect:/funcionario/cadastro_funcionario/" + funcionarios.getId_funcionario();
 
     }
 
@@ -76,7 +76,7 @@ public class FuncionariosController {
 
             } else {
 
-                mv.addObject("resultados", List.of()); // Se não encontrar, retorna lista vazia
+                mv.addObject("resultados", List.of());
 
             }
 

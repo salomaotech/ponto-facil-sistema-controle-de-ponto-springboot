@@ -27,14 +27,11 @@
             <button class="back-button" onclick="window.history.back()">←</button>
             <h1>Consulta de Pontos</h1>
 
-            <form th:action="@{/painel_pesquisa_ponto}" method="get">
+            <form th:action="@{/ponto/painel_pesquisa_ponto}" method="get">
 
-                <label for="dataInicio">Data inicial:</label>
+                <label for="dataInicio">Data</label>
                 <input type="date" id="dataInicio" name="dataInicio"
                     th:value="${#temporals.format(dataInicio, 'yyyy-MM-dd')}" />
-
-                <label for="dataFim">Data final:</label>
-                <input type="date" id="dataFim" name="dataFim" th:value="${#temporals.format(dataFim, 'yyyy-MM-dd')}" />
 
                 <button type="submit" class="submit-button">Pesquisar</button>
 
@@ -53,13 +50,15 @@
                         <th>Editar</th>
                     </tr>
                 </thead>
+
+
                 <tbody>
                     <tr th:each="fp : ${funcionariosComPonto}">
                         <!-- Exibe o nome do funcionário -->
                         <td th:text="${fp[0].nome}"></td>
                         <!-- Exibe a data de entrada formatada -->
                         <td
-                            th:text="${#temporals.format(fp[1]?.horarioEntrada, 'dd/MM/yyyy') != null ? #temporals.format(fp[1].horarioEntrada, 'dd/MM/yyyy') : 'Não registrado'}">
+                            th:text="${#temporals.format(fp[1]?.data, 'dd/MM/yyyy') != null ? #temporals.format(fp[1].data, 'dd/MM/yyyy') : 'Não registrado'}">
                         </td>
                         <!-- Verifica o status do ponto -->
                         <td>
@@ -77,19 +76,21 @@
 
                         <td>
                             <!-- Link de edição quando existe ponto registrado -->
-                            <a th:if="${fp[1] != null}" th:href="@{'/cadastro_ponto/' + ${fp[1].id_registro}}"
+                            <a th:if="${fp[1] != null}" th:href="@{'/ponto/cadastro_ponto/' + ${fp[1].id_registro}}"
                                 class="edit-icon" title="Editar ponto">✏️</a>
 
                             <!-- Link para novo cadastro quando não existe ponto -->
-                            <a th:if="${fp[1] == null}" th:href="@{'/cadastro_ponto'}" class="edit-icon"
-                                title="Cadastrar ponto">📌</a>
-                        </td>
+                            <a th:if="${fp[1] == null}"
+                                th:href="@{'/ponto/cadastro_ponto?idFuncionario=' + ${fp[0].id_funcionario} + '&dataInicio=' + ${#temporals.format(dataInicio, 'yyyy-MM-dd')}}"
+                                class="edit-icon" title="Cadastrar ponto">📌</a>
 
                     </tr>
                     <tr th:if="${#lists.isEmpty(funcionariosComPonto)}">
                         <td colspan="4">Nenhum ponto encontrado.</td> <!-- Ajustado colspan -->
                     </tr>
                 </tbody>
+
+
             </table>
 
         </div>

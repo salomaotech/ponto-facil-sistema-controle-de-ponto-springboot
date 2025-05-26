@@ -33,7 +33,7 @@ public class JustificativaController {
 
         repository.save(justificativa);
 
-        return "redirect:/cadastro_justificativa/" + justificativa.getId_justificativa();
+        return "redirect:/justificativa/cadastro_justificativa/" + justificativa.getId_justificativa();
 
     }
 
