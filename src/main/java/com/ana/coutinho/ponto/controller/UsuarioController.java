@@ -34,13 +34,13 @@ public class UsuarioController {
         if (!usuarOptional.isEmpty()) {
 
             session.setAttribute("usuarioLogado", usuarOptional.get());
-            session.setAttribute("mensagemErro", null);
+            session.setAttribute("mensagemErroLogin", null);
             return "redirect:/";
 
         } else {
 
             session.setAttribute("usuarioLogado", null);
-            session.setAttribute("mensagemErro", "Login incorreto!!!");
+            session.setAttribute("mensagemErroLogin", "Acesso negado!!!");
             return "redirect:/usuario/pagina_login";
 
         }
@@ -56,14 +56,14 @@ public class UsuarioController {
 
             // Se der certo redireciona para a Home
             session.setAttribute("usuarioLogado", usuarOptional.get());
-            session.setAttribute("mensagemErro", null);
+            session.setAttribute("mensagemErroSenhaRecupera", null);
             return "redirect:/";
 
         } else {
 
             // Se der errado redireciona para a página de recuperação
             session.setAttribute("usuarioLogado", null);
-            session.setAttribute("mensagemErro", "Palavra chave incorreta!!!");
+            session.setAttribute("mensagemErroSenhaRecupera", "Palavra chave incorreta!!!");
             return "redirect:/usuario/recupera_senha_usuario";
 
         }
@@ -79,7 +79,7 @@ public class UsuarioController {
         // Verificação inicial de campos obrigatórios
         if (!UsuarioService.possuiCamposObrigatoriosPreenchidos(usuario)) {
 
-            session.setAttribute("mensagemErro", "Todos os campos devem ser preenchidos!");
+            session.setAttribute("mensagemErroCadastro", "Todos os campos devem ser preenchidos!");
             return new ModelAndView("redirect:/usuario/cadastro_usuario");
 
         }
@@ -87,7 +87,7 @@ public class UsuarioController {
         // Validação: senhas não conferem
         if (!usuario.getPassword().equals(usuario.getPasswordConfirm())) {
 
-            session.setAttribute("mensagemErro", "As senhas não combinam!");
+            session.setAttribute("mensagemErroCadastro", "As senhas não combinam!");
             return new ModelAndView("redirect:/usuario/cadastro_usuario");
 
         }
@@ -107,12 +107,12 @@ public class UsuarioController {
                 UsuarioService.cifrarSenha(usuario, cifraSenha);
                 repository.save(usuario);
 
-                return new ModelAndView("redirect:/usuario/logout");
+                return new ModelAndView("redirect:/");
 
             }
 
             // Outro usuário já usa este e-mail
-            session.setAttribute("mensagemErro", "Já existe um usuário com este e-mail!");
+            session.setAttribute("mensagemErroCadastro", "Já existe um usuário com este e-mail!");
             return new ModelAndView("redirect:/usuario/cadastro_usuario");
 
         }
@@ -120,7 +120,12 @@ public class UsuarioController {
         // Novo usuário
         UsuarioService.cifrarSenha(usuario, cifraSenha);
         repository.save(usuario);
-        return new ModelAndView("redirect:/usuario/logout");
+
+        // Já faz o login
+        session.setAttribute("usuarioLogado", usuario);
+        session.setAttribute("mensagemErroLogin", null);
+
+        return new ModelAndView("redirect:/");
 
     }
 

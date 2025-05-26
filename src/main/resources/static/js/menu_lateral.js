@@ -26,7 +26,7 @@ function criarMenu() {
                 </ul>
         
                 <ul>
-                   <li><a href="/pesquisa_relatorio">📄 Gerar Relatório de Pontos</a></li>
+                   <li><a href="/relatorio/pesquisa_relatorio">📄 Gerar Relatório de Pontos</a></li>
                 </ul>
 
             </li>

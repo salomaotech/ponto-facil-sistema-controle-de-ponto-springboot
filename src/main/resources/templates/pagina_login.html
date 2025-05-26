@@ -47,8 +47,8 @@
 
                 <button type="submit" class="login">Login</button>
 
-                <div class="mensagem-erro" th:if="${session.mensagemErro != null}">
-                    <h2 th:text="${session.mensagemErro}"></h2>
+                <div class="mensagem-erro" th:if="${session.mensagemErroLogin != null}">
+                    <h2 th:text="${session.mensagemErroLogin}"></h2>
                 </div>
 
                 <div class="register-link">

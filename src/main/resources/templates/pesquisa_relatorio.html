@@ -27,7 +27,7 @@
             <button class="back-button" onclick="window.history.back()">←</button>
             <h1>Gerar relatório de Pontos</h1>
 
-            <form th:action="@{/pesquisa_relatorio}" method="get">
+            <form th:action="@{/relatorio/pesquisa_relatorio}" method="get">
 
                 <label for="funcionarios">* Funcionário:</label>
                 <select name="idFuncionario" id="funcionarios" required>
@@ -75,7 +75,7 @@
                         <td th:text="${p.horarioSaida}"></td>
                         <td th:text="${p.horasExtras}"></td>
                         <td>
-                            <a th:href="@{'/cadastro_ponto/' + ${p.id_registro}}">✏️</a> <!-- Link para edição -->
+                            <a th:href="@{'/ponto/cadastro_ponto/' + ${p.id_registro}}">✏️</a> <!-- Link para edição -->
                         </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(pontos)}">

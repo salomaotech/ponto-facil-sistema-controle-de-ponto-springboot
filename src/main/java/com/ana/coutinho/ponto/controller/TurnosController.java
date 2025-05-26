@@ -29,13 +29,13 @@ public class TurnosController {
 
             // Carrega o primeiro turno registrado e redireciona para ele
             Turnos primeiroTurno = repository.findAll().get(0);
-            return "redirect:/cadastro_turno/" + primeiroTurno.getId_turno();
+            return "redirect:/turno/cadastro_turno/" + primeiroTurno.getId_turno();
 
         }
 
         // Caso contrário, salva o novo turno ou atualiza o existente
         repository.save(turnos);
-        return "redirect:/cadastro_turno/" + turnos.getId_turno();
+        return "redirect:/turno/cadastro_turno/" + turnos.getId_turno();
 
     }
 

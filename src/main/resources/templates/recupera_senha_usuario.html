@@ -35,8 +35,8 @@
                     <input th:field="*{keypass}" placeholder="Palavra chave" type="text" required>
                 </div>
 
-                <div class="mensagem-erro" th:if="${session.mensagemErro != null}">
-                    <h2 th:text="${session.mensagemErro}"></h2>
+                <div class="mensagem-erro" th:if="${session.mensagemErroSenhaRecupera != null}">
+                    <h2 th:text="${session.mensagemErroSenhaRecupera}"></h2>
                 </div>
 
                 <button type="submit" class="login">Recuperar</button>
