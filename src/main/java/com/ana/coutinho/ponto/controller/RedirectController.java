@@ -9,7 +9,7 @@ public class RedirectController {
     @GetMapping("/")
     public String redirectToHome() {
 
-        return "redirect:/tela/home";
+        return "redirect:/home";
     }
 
 }

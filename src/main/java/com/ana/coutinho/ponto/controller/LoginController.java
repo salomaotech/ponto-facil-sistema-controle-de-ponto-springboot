@@ -31,13 +31,13 @@ public class LoginController {
 
             session.setAttribute("usuarioLogado", usuarOptional.get());
             session.setAttribute("mensagemLogin", null);
-            return "redirect:/tela/home";
+            return "redirect:/home";
 
         } else {
 
             session.setAttribute("usuarioLogado", null);
             session.setAttribute("mensagemLogin", "Login incorreto!!!");
-            return "redirect:/tela/login";
+            return "redirect:/login";
 
         }
 
@@ -52,13 +52,13 @@ public class LoginController {
 
             session.setAttribute("usuarioLogado", usuarOptional.get());
             session.setAttribute("mensagemLogin", null);
-            return "redirect:/tela/home";
+            return "redirect:/home";
 
         } else {
 
             session.setAttribute("usuarioLogado", null);
             session.setAttribute("mensagemLogin", "Login incorreto!!!");
-            return "redirect:/tela/login";
+            return "redirect:/login";
 
         }
 
@@ -68,7 +68,7 @@ public class LoginController {
     public String deslogar(HttpSession session) {
 
         session.invalidate();
-        return "redirect:/tela/login";
+        return "redirect:/login";
 
     }
 

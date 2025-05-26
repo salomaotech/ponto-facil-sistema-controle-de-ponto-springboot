@@ -107,6 +107,7 @@ public class Datas {
      * @param object Objeto
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static boolean isObjetoData(Object object) {
 
         List tiposValidos = new ArrayList();

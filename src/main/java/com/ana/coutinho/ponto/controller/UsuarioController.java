@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class UsuarioController {
         if (!possuiCamposObrigatoriosPreenchidos(usuario)) {
 
             session.setAttribute("mensagemUsuarioExiste", "Todos os campos devem ser preenchidos!");
-            return new ModelAndView("redirect:/tela/cadastro_usuario");
+            return new ModelAndView("redirect:/cadastro_usuario");
 
         }
 
@@ -40,7 +41,7 @@ public class UsuarioController {
         if (!usuario.getPassword().equals(usuario.getPasswordConfirm())) {
 
             session.setAttribute("mensagemUsuarioExiste", "As senhas não combinam!");
-            return new ModelAndView("redirect:/tela/cadastro_usuario");
+            return new ModelAndView("redirect:/cadastro_usuario");
 
         }
 
@@ -65,14 +66,14 @@ public class UsuarioController {
 
             // Outro usuário já usa este e-mail
             session.setAttribute("mensagemUsuarioExiste", "Já existe um usuário com este e-mail!");
-            return new ModelAndView("redirect:/tela/cadastro_usuario");
+            return new ModelAndView("redirect:/cadastro_usuario");
 
         }
 
         // Novo usuário
         cifrarSenha(usuario, cifraSenha);
         repository.save(usuario);
-        return new ModelAndView("redirect:/tela/login");
+        return new ModelAndView("redirect:/login");
 
     }
 
@@ -90,6 +91,60 @@ public class UsuarioController {
                 && usuario.getPassword() != null && !usuario.getPassword().trim().isEmpty()
                 && usuario.getPasswordConfirm() != null && !usuario.getPasswordConfirm().trim().isEmpty()
                 && usuario.getKeypass() != null && !usuario.getKeypass().trim().isEmpty();
+
+    }
+
+    @GetMapping("/login")
+    public ModelAndView login(HttpSession session) {
+
+        ModelAndView mv;
+
+        if (session.getAttribute("usuarioLogado") == null) {
+
+            // Usuário NÃO logado
+            mv = new ModelAndView("login");
+            mv.addObject("mensagemLogin", session.getAttribute("mensagemLogin"));
+            mv.addObject("usuario", new Usuario());
+
+        } else {
+
+            // Usuário logado
+            mv = new ModelAndView("redirect:/home");
+
+        }
+
+        return mv;
+
+    }
+
+    @GetMapping("/recupera_senha_usuario")
+    public ModelAndView recuperarSenha() {
+
+        ModelAndView mv = new ModelAndView("recupera_senha_usuario");
+        mv.addObject("usuario", new Usuario());
+        return mv;
+
+    }
+
+    @GetMapping("/cadastro_usuario")
+    public ModelAndView cadastroUsuario(HttpSession session) {
+
+        ModelAndView mv = new ModelAndView("cadastro_usuario");
+        mv.addObject("mensagemUsuarioExiste", session.getAttribute("mensagemUsuarioExiste"));
+
+        if (session.getAttribute("usuarioLogado") == null) {
+
+            // Novo cadastro
+            mv.addObject("usuario", new Usuario());
+
+        } else {
+
+            // Recupera o usuário logado
+            mv.addObject("usuario", session.getAttribute("usuarioLogado"));
+
+        }
+
+        return mv;
 
     }
 

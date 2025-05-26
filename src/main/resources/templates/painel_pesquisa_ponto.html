@@ -27,7 +27,7 @@
             <button class="back-button" onclick="window.history.back()">←</button>
             <h1>Consulta de Pontos</h1>
 
-            <form th:action="@{/tela/painel_pesquisa_ponto}" method="get">
+            <form th:action="@{/painel_pesquisa_ponto}" method="get">
 
                 <label for="dataInicio">Data inicial:</label>
                 <input type="date" id="dataInicio" name="dataInicio"
@@ -77,11 +77,11 @@
 
                         <td>
                             <!-- Link de edição quando existe ponto registrado -->
-                            <a th:if="${fp[1] != null}" th:href="@{'/tela/cadastro_ponto/' + ${fp[1].id_registro}}"
+                            <a th:if="${fp[1] != null}" th:href="@{'/cadastro_ponto/' + ${fp[1].id_registro}}"
                                 class="edit-icon" title="Editar ponto">✏️</a>
 
                             <!-- Link para novo cadastro quando não existe ponto -->
-                            <a th:if="${fp[1] == null}" th:href="@{'/tela/cadastro_ponto'}" class="edit-icon"
+                            <a th:if="${fp[1] == null}" th:href="@{'/cadastro_ponto'}" class="edit-icon"
                                 title="Cadastrar ponto">📌</a>
                         </td>
 
