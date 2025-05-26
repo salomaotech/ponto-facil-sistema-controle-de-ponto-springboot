@@ -24,6 +24,68 @@ public class UsuarioController {
     private UsuarioRepository repository;
 
     @PostMapping
+    public String logar(@ModelAttribute Usuario usuario, HttpSession session) {
+
+        CifraSenha cifraSenha = new CifraSenha();
+        Optional<Usuario> usuarOptional = repository.findByEmailAndPassword(usuario.getEmail(),
+                cifraSenha.cifrarSenha(usuario.getPassword()));
+
+        if (!usuarOptional.isEmpty()) {
+
+            session.setAttribute("usuarioLogado", usuarOptional.get());
+            session.setAttribute("mensagemLogin", null);
+            return "redirect:/home";
+
+        } else {
+
+            session.setAttribute("usuarioLogado", null);
+            session.setAttribute("mensagemLogin", "Login incorreto!!!");
+            return "redirect:/login/pagina_login";
+
+        }
+
+    }
+
+    @PostMapping("/recupera")
+    public String recuperar(@ModelAttribute Usuario usuario, HttpSession session) {
+
+        Optional<Usuario> usuarOptional = repository.findByEmailAndKeypass(usuario.getEmail(), usuario.getKeypass());
+
+        if (!usuarOptional.isEmpty()) {
+
+            session.setAttribute("usuarioLogado", usuarOptional.get());
+            session.setAttribute("mensagemLogin", null);
+            return "redirect:/home";
+
+        } else {
+
+            session.setAttribute("usuarioLogado", null);
+            session.setAttribute("mensagemLogin", "Login incorreto!!!");
+            return "redirect:/login";
+
+        }
+
+    }
+
+    @GetMapping("/pagina_login")
+    public ModelAndView paginaLogin(HttpSession session) {
+
+        ModelAndView mv = new ModelAndView("pagina_login");
+        mv.addObject("usuario", new Usuario());
+        mv.addObject("mensagemLogin", session.getAttribute("mensagemLogin"));
+        return mv;
+
+    }
+
+    @GetMapping("/logout")
+    public String deslogar(HttpSession session) {
+
+        session.invalidate();
+        return "redirect:/login";
+
+    }
+
+    @PostMapping
     public ModelAndView cadastrar(@ModelAttribute Usuario usuario, HttpSession session) {
 
         Optional<Usuario> usuarOptional = repository.findByEmail(usuario.getEmail());

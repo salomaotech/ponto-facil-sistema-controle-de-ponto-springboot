@@ -19,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -33,11 +32,8 @@ import com.ana.coutinho.ponto.services.CalculaHoras;
 import com.ana.coutinho.ponto.services.FileUploadService;
 import com.ana.coutinho.ponto.services.RelatorioHorasTrabalhadasPdf;
 
-import jakarta.servlet.http.HttpSession;
-
 @Controller
-@RequestMapping("")
-public class ViewController {
+public class RelatorioController {
 
     @Autowired
     private FuncionariosRepository funcionariosRepository;
@@ -50,23 +46,6 @@ public class ViewController {
 
     @Autowired
     private FileUploadService fileUploadService;
-
-    @GetMapping("/home")
-    public ModelAndView home(HttpSession session) {
-
-        if (session.getAttribute("usuarioLogado") == null) {
-
-            // Usuário NÃO logado
-            return new ModelAndView("redirect:/login");
-
-        } else {
-
-            // Usuário logado
-            return new ModelAndView("redirect:/painel_pesquisa_ponto");
-
-        }
-
-    }
 
     /* baixa o relatório aqui */
     @GetMapping("/baixar-relatorio")
