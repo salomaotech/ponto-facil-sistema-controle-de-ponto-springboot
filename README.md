@@ -38,53 +38,21 @@ Este é o projeto **Sistema de Ponto**, uma aplicação de gerenciamento de pont
 
 ## Endpoints
 
-1. **Cadastro de Usuário (Criar Login)**
-   - **URL**: `http://localhost:8080/tela/cadastro_usuario`
-   - **Método**: `POST`
-   - **Descrição**: Cadastro de um novo usuário (e-mail, senha, confirmação de senha e palavra chave para recuperação de senha).
+Os endpoints da aplicação estão organizados por módulos, e cada funcionalidade é acessada via uma URL específica conforme seu módulo correspondente.
 
-2. **Login de Usuário**
-   - **URL**: `http://localhost:8080/tela/login`
-   - **Método**: `POST`
-   - **Descrição**: Realiza o login de um usuário registrado.
+Por exemplo:
+- Funcionalidades relacionadas a funcionários são acessadas via caminhos que começam com `/funcionario/`.
+- Para turnos, o caminho base é `/turno/`.
+- Para usuários, `/usuario/`.
+- E assim por diante para os demais módulos do sistema.
 
-3. **Cadastro de Turno**
-   - **URL**: `http://localhost:8080/tela/cadastro_turno`
-   - **Método**: `POST`
-   - **Descrição**: Cadastro dos turnos de trabalho (entrada, pausa, retorno, saída).
+A estrutura genérica para acesso aos endpoints é:
 
-4. **Cadastro de Funcionário**
-   - **URL**: `http://localhost:8080/tela/cadastro_funcionario`
-   - **Método**: `POST`
-   - **Descrição**: Cadastro de um novo funcionário.
+```
+http://localhost:8080/{modulo}/{recurso}
+```
 
-5. **Home**
-   - **URL**: `localhost:8080/tela/home`
-   - **Descrição**: Página inicial.
-
-6. **Cadastro de Funcionário (Edição)**
-   - **URL**: `localhost:8080/tela/cadastro_funcionario/{id}`
-   - **Descrição**: Página para editar os dados de um funcionário existente, onde `{id}` é o ID do funcionário.
-
-7. **Cadastro de Turno (Edição)**
-   - **URL**: `localhost:8080/tela/cadastro_turno/{id}`
-   - **Descrição**: Página para editar um turno existente, onde `{id}` é o ID do turno.
-
-8. **Cadastro de Justificativa**
-   - **URL**: `localhost:8080/tela/cadastro_justificativa`
-   - **Descrição**: Página para cadastrar uma nova justificativa.
-
-9. **Edição de Justificativa**
-   - **URL**: `localhost:8080/tela/cadastro_justificativa/{id}`
-   - **Descrição**: Página para editar uma justificativa existente, onde `{id}` é o ID da justificativa.
-
-10. **Cadastro de Ponto**
-    - **URL**: `localhost:8080/tela/cadastro_ponto`
-    - **Descrição**: Página para cadastrar um novo ponto.
-
-11. **Edição de Ponto**
-    - **URL**: `localhost:8080/tela/cadastro_ponto/{id}`
-    - **Descrição**: Página para editar um ponto existente, onde `{id}` é o ID do ponto.
+onde `{modulo}` representa o módulo desejado (como `funcionario`, `turno`, `usuario`) e `{recurso}` representa a operação ou entidade específica dentro daquele módulo.
 
 ## Regras de Funcionamento
 
