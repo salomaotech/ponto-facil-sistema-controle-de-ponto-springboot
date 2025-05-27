@@ -204,4 +204,13 @@ public class PontoController {
 
     }
 
+    @GetMapping("/remove/{id}")
+    public ModelAndView remover(@PathVariable("id") long id) {
+
+        ModelAndView mv = new ModelAndView("redirect:/ponto/pesquisa_ponto");
+        pontoRepository.deleteById(id);
+        return mv;
+
+    }
+
 }

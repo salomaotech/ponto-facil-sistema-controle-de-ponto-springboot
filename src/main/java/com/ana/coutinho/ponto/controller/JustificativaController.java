@@ -120,4 +120,13 @@ public class JustificativaController {
 
     }
 
+    @GetMapping("/remove/{id}")
+    public ModelAndView remover(@PathVariable("id") long id) {
+
+        ModelAndView mv = new ModelAndView("redirect:/justificativa/pesquisa_justificativa");
+        repository.deleteById(id);
+        return mv;
+
+    }
+
 }

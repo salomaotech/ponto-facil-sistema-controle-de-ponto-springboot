@@ -2,6 +2,8 @@ package com.ana.coutinho.ponto.controller;
 
 import com.ana.coutinho.ponto.model.Funcionarios;
 import com.ana.coutinho.ponto.repository.FuncionariosRepository;
+import com.ana.coutinho.ponto.repository.JustificativaRepository;
+import com.ana.coutinho.ponto.repository.PontoRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,6 +24,12 @@ public class FuncionariosController {
 
     @Autowired
     private FuncionariosRepository repository;
+
+    @Autowired
+    private PontoRepository pontoRepository;
+
+    @Autowired
+    private JustificativaRepository justificativaRepository;
 
     @PostMapping()
     public String save(@ModelAttribute Funcionarios funcionarios) {
@@ -85,6 +93,20 @@ public class FuncionariosController {
             mv.addObject("resultados", repository.findAll());
 
         }
+
+        return mv;
+
+    }
+
+    @GetMapping("/remove/{id}")
+    public ModelAndView remover(@PathVariable("id") long id) {
+
+        ModelAndView mv = new ModelAndView("redirect:/funcionario/pesquisa_funcionario");
+
+        // Remove relacionamentos (pontos, justificativas, etc)
+        pontoRepository.deleteByFuncionarioId(id);
+        justificativaRepository.deleteByFuncionarioId(id);
+        repository.deleteById(id);
 
         return mv;
 

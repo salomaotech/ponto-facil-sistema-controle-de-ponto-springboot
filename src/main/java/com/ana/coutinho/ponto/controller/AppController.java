@@ -6,6 +6,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import jakarta.servlet.http.HttpSession;
 
+/**
+ * https://github.com/salomaotech
+ */
 @Controller
 public class AppController {
 

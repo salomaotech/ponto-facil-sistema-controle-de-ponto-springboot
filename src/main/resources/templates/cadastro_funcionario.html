@@ -132,10 +132,28 @@
 
             </form>
 
-        </div>
+            <!-- Formulário de exclusão: só aparece se estiver em modo de edição -->
+            <form th:if="${funcionario.id_funcionario} != null"
+                th:action="@{'/funcionario/remove/' + ${funcionario.id_funcionario}}" method="get"
+                onsubmit="return confirmarExclusao()">
+
+                <button type="submit" class="submit-button" style="background-color: #d9534f;">
+                    Excluir Funcionário
+                </button>
+            </form>
+
+            <script>
+                function confirmarExclusao() {
+                    return confirm("Tem certeza que deseja excluir este funcionário?");
+                }
+            </script>
+
     </main>
 
+    <footer></footer>
+
     <script th:src="@{/js/header.js}"></script>
+    <script th:src="@{/js/footer.js}"></script>
     <script th:if="${session.usuarioLogado}" th:src="@{/js/menu_lateral.js}"></script>
 
 </body>

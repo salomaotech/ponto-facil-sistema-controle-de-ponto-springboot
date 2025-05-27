@@ -77,6 +77,19 @@ main {
     text-align: center;
 }
 
+footer {
+
+    padding: 5px;
+    width: 100%;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-color: rgb(0, 164, 0);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    text-align: center;
+    color: #fff;
+
+}
+
 .input-box {
     width: 100%;
 }
